@@ -7,26 +7,20 @@
             <table class="table">
                 <thead>
                 <th>ID</th>
-                <th>Surname</th>
                 <th>Name</th>
-                <th>Group</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Address</th>
+                <th>Faculty</th>
+                <th>Teacher</th>
                 <th></th>
                 </thead>
 
                 <tbody>
-                @foreach($students as $student)
+                @foreach($groups as $group)
 
                     <tr>
-                        <th>{{ 'u' . $student->id }}</th>
-                        <td>{{ $student->surname }}</td>
-                        <td>{{ $student->name  }}</td>
-                        <td>{{ $student->gr_id }}</td>
-                        <td>{{ $student->phone }}</td>
-                        <td>{{ $student->email }}</td>
-                        <td>{{ $student->address }}</td>
+                        <th>{{ $group->id }}</th>
+                        <td>{{ $group->name }}</td>
+                        <td>{{ $group->faculty  }}</td>
+                        <td>{{ $group->teacher }}</td>
                         <td>{{--<a href="{{ route('students',$student->num) }}" class="btn btn-default btn-sm">View</a>
                             <a href="{{ route('students',$student->num) }}" class="btn btn-default btn-sm">Edit</a>--}}</td>
                     </tr>
@@ -37,5 +31,6 @@
             </table>
         </div>
     </div>
+
 
 @endsection
