@@ -14,6 +14,7 @@ class CreateAttendancesTable extends Migration
     public function up()
     {
         Schema::create('attendances', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->string('time_id');
             $table->string('student_id');
             $table->timestamp('check_in')->nullable();

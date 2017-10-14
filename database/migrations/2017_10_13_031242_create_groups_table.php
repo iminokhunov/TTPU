@@ -14,8 +14,8 @@ class CreateGroupsTable extends Migration
     public function up()
     {
         Schema::create('groups', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->string('name')->primary();
+            $table->engine = 'InnoDB';
+            $table->string('id')->primary();
             $table->string('faculty'); //Student table da gr_id ga teng
             $table->string('teacher');
             $table->timestamps();
