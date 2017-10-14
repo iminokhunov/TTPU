@@ -20,7 +20,7 @@
                 @foreach($students as $student)
 
                     <tr>
-                        <th>{{ 'u' . $student->id }}</th>
+                        <th>{{  $student->id }}</th>
                         <td>{{ $student->surname }}</td>
                         <td>{{ $student->name  }}</td>
                         <td>{{ $student->gr_id }}</td>
