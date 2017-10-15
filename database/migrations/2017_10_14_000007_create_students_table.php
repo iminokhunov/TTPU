@@ -15,16 +15,27 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->string('id')->primary();
+            $table->string('id',191)->primary();
+            $table->string('password');
+            $table->rememberToken();
             $table->string('name');
             $table->string('surname');
-            $table->string('birthdate');
-            $table->string('gr_id');
+            $table->date('birthday');
+            $table->string('group_id',191);
             $table->string('phone');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('address');
             $table->timestamps();
         });
+
+        Schema::table('students', function(Blueprint $table)
+        {
+            $table->foreign('group_id')
+                ->references('id')->on('groups')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        });
+
     }
 
     /**
