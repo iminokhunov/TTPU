@@ -19,9 +19,19 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email', 100)->unique();
             $table->string('password');
+            $table->string('teacher_id',191);
             $table->rememberToken();
             $table->timestamps();
         });
+
+        Schema::table('users', function(Blueprint $table)
+        {
+            $table->foreign('teacher_id')
+                ->references('id')->on('teachers')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        });
+
     }
 
     /**
