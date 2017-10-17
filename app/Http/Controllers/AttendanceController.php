@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Slot;
+use App\Timeslot;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
@@ -13,7 +15,12 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        //
+        //$slot = AttendanceController::findSlot();
+        echo date('Y-m-j',time());
+        $timeslots = DB::table('timeslots')
+            ->whereDate('date', date('Y-m-j',time()))
+            ->get();
+
     }
 
     /**
@@ -81,4 +88,22 @@ class AttendanceController extends Controller
     {
         //
     }
+
+    protected function findSlot()
+    {
+        date_default_timezone_set('Asia/Tashkent');
+        $slots = Slot::all();
+        foreach($slots as $slot)
+        {
+            $start = strtotime($slot->start_time);
+            $end = strtotime($slot->end_time);
+            if(time()>=$start && time()<=$end)
+            {
+                return $slot->id;
+            }
+        }
+
+
+    }
+
 }
