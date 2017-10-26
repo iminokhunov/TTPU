@@ -38,6 +38,9 @@
                             <a class="navbar-brand" href="{{ url('faculty') }}">
                                 Faculties
                             </a>
+                        <a class="navbar-brand" href="{{ url('attendance') }}">
+                            Make Attendance
+                        </a>
                     @endguest
                 </div>
 

@@ -23,7 +23,7 @@ Route::resource('students', 'StudentController');
 
 Route::resource('groups', 'GroupController');
 
-Route::get('attendance', 'AttendanceController@index');
+Route::resource('attendance', 'AttendanceController');
 
 Route::resource('faculty', 'FacultyController');
 

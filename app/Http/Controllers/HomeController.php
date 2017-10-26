@@ -27,6 +27,6 @@ class HomeController extends Controller
     {
 
 
-       // return view('welcome')->withSlot($slot);
+        return view('welcome');
     }
 }

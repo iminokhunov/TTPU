@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Slot;
 use App\Timeslot;
+use App\User;
+use App\Attendance;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\VarDumper\Cloner\Data;
@@ -15,13 +18,27 @@ class AttendanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //$slot = AttendanceController::findSlot();
-       // echo date('Y-m-j',time());
-        $groups =DB::table('groups')->get();
-           // ->whereDate('date', date('Y-m-j',time()))
-            return view('attendance.index')->withGroups($groups);
+        date_default_timezone_set('Asia/Tashkent');
+        $teacher = User::find(1)->teacher->id;
+        $slot = AttendanceController::findSlot();
+        $date = date('Y-m-j',time());
+        $students = DB::table('timeslots')
+            ->where('date',$date)
+            ->where('slot_id',$slot)
+            ->where('teacher_id',$teacher)
+            ->join('students','timeslots.group_id','students.group_id')
+            ->select('students.id','students.name','students.surname','students.group_id','time_id')
+            ->get();
+
+        return view('attendance.index')->withStudents($students);
     }
 
     /**
@@ -42,7 +59,18 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $date = date('Y-m-j',time());
+        date_default_timezone_set('Asia/Tashkent');
+        foreach($request->present_students as $key => $value)
+        {
+            Attendance::insert([
+                'time_id' => $value,
+                'student_id' => $key,
+                'date' => $date
+            ]);
+        }
+        Session::flash('success','Student was successfully saved');
+        return redirect()->route('home');
     }
 
     /**
@@ -103,8 +131,6 @@ class AttendanceController extends Controller
                 return $slot->id;
             }
         }
-
-
     }
 
 }

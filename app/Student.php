@@ -10,4 +10,8 @@ class Student extends Model
     {
         return $this->belongsTo('App/Group');
     }
+    public function attendances()
+    {
+        return $this->hasMany('App\Attendance');
+    }
 }
