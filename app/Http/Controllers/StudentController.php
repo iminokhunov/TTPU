@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 
+use App\Group;
 use App\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +32,9 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $groups = Group::all();
 
+        return view('students.create')->withGroups($groups);
     }
 
     /**
@@ -37,6 +45,13 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'ids.*'      =>  'required|size:6|alpha_num',
+            'groups.*'   =>  'required',
+            'names.*'    =>  'required|alpha|max:30',
+            'surnames.*' =>  'required|alpha|max:30'
+        ]);
+
         //
     }
 

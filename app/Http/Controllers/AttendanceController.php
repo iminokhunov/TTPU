@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Slot;
 use App\Timeslot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class AttendanceController extends Controller
 {
@@ -16,11 +18,10 @@ class AttendanceController extends Controller
     public function index()
     {
         //$slot = AttendanceController::findSlot();
-        echo date('Y-m-j',time());
-        $timeslots = DB::table('timeslots')
-            ->whereDate('date', date('Y-m-j',time()))
-            ->get();
-
+       // echo date('Y-m-j',time());
+        $groups =DB::table('groups')->get();
+           // ->whereDate('date', date('Y-m-j',time()))
+            return view('attendance.index')->withGroups($groups);
     }
 
     /**

@@ -23,7 +23,7 @@ class CreateStudentsTable extends Migration
             $table->date('birthday');
             $table->string('group_id',191);
             $table->string('phone');
-            $table->string('email')->unique();
+            $table->string('email',191)->unique();
             $table->string('address');
             $table->timestamps();
         });

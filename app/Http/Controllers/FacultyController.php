@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Faculty;
-use App\Group;
-use App\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-class GroupController extends Controller
+class FacultyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +15,9 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = Group::all();
+        $faculties = Faculty::all();
 
-        return view('groups.index')->withGroups($groups);
+        return view('faculty.index')->withFaculties($faculties);
     }
 
     /**
@@ -29,9 +27,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $teachers = Teacher::all();
-        $faculties = Faculty::all();
-        return view('groups.create')->withTeachers($teachers)->withFaculties($faculties);
+        return view('faculty.create');
     }
 
     /**
@@ -42,25 +38,21 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-       // validate the requeast
         $this->validate($request,array(
-            'id'          =>  'required|max:191',
-            'faculty_id'  =>  'required',
-            'teacher_id'  =>  'required',
+            'id'       =>    'bail|required|unique:faculties|max:191',
+            'name'        =>    'required|min:5|max:191',
         ));
-
         //store in the database
-        $group = new Group();
+        $faculty = new Faculty();
 
-        $group->id           =  $request->id;
-        $group->faculty_id   =  $request->faculty_id;
-        $group->teacher_id   =  $request->teacher_id;
-
-        $group->save();
+        $faculty->id      =  $request->id;
+        $faculty->name    =  $request->name;
 
 
-        Session::flash('success','The Group was successfully saved');
-        return redirect()->route('groups.index');
+        $faculty->save();
+
+        Session::flash('success','The Faculty was successfully saved');
+        return redirect()->route('faculty.index');
     }
 
     /**

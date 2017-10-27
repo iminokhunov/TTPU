@@ -3,6 +3,12 @@
 @section('content')
 
     <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <a href="{{ route('students.create') }}" class="btn btn-primary btn-lg btn-block btn-h1-spacing">
+                Create New Students
+            </a>
+
+        </div>
         <div class="col-md-10 col-md-offset-1">
             <table class="table">
                 <thead>
