@@ -23,7 +23,11 @@ Route::resource('students', 'StudentController');
 
 Route::resource('groups', 'GroupController');
 
-Route::resource('attendance', 'AttendanceController');
+Route::resource('attendance', 'AttendanceController',['except'=>['show','destroy']]);
+Route::get('attendance/display','AttendanceController@display')->name('attendance.display');
+Route::get('attendance/delete}','AttendanceController@delete')->name('attendance.delete');
+Route::delete('attendance/{student_id}/{time_id}', 'AttendanceController@demolish')->name('attendance.demolish');
+
 
 Route::resource('faculty', 'FacultyController');
 

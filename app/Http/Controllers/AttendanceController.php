@@ -9,6 +9,7 @@ use App\Attendance;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use Symfony\Component\VarDumper\Cloner\Data;
 
 class AttendanceController extends Controller
@@ -38,6 +39,15 @@ class AttendanceController extends Controller
             ->select('students.id','students.name','students.surname','students.group_id','time_id')
             ->get();
 
+        $time_id = $students->pluck('time_id')->unique();
+        $stored = Attendance::whereIn('time_id',$time_id)->pluck('student_id')->toArray();
+        $students = $students->filter(function ($value, $key) use ($stored) {
+            if(!in_array($value->id,$stored))
+            {
+                return $value;
+            }
+
+        });
         return view('attendance.index')->withStudents($students);
     }
 
@@ -59,9 +69,20 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        $date = date('Y-m-j',time());
         date_default_timezone_set('Asia/Tashkent');
-        foreach($request->present_students as $key => $value)
+        $teacher = User::find(1)->teacher->id;
+        $slot = AttendanceController::findSlot();
+        $date = date('Y-m-j',time());
+
+        $stored = Attendance::
+            whereIn('time_id',$request->present_students)
+            ->pluck('student_id')->toArray();
+
+        $store = array_flip ( $stored );
+        $difference = array_diff_key($request->present_students,$store);
+
+
+        foreach($difference as $key => $value)
         {
             Attendance::insert([
                 'time_id' => $value,
@@ -69,8 +90,9 @@ class AttendanceController extends Controller
                 'date' => $date
             ]);
         }
+
         Session::flash('success','Student was successfully saved');
-        return redirect()->route('home');
+        return redirect()->route('attendance.display');
     }
 
     /**
@@ -79,17 +101,36 @@ class AttendanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function display()
     {
-        //
+        date_default_timezone_set('Asia/Tashkent');
+        $teacher = User::find(1)->teacher->id;
+        $slot = AttendanceController::findSlot();
+        $date = date('Y-m-j',time());
+        $students = DB::table('attendances')
+            ->whereIn('time_id',function ($query) use ($date,$slot,$teacher){
+                $query->select('time_id')
+                    ->from('timeslots')
+                    ->where('date',$date)
+                    ->where('slot_id',$slot)
+                    ->where('teacher_id',$teacher);
+            })
+            ->join('students','attendances.student_id','students.id')
+            ->select('students.id','students.name','students.surname','students.group_id','time_id')
+            ->get()->toArray();
+        return view('attendance.display')->withStudents($students);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function delete(Request $request)
+    {
+         $student = $request->toArray();
+        $student = (object) $student;
+       // dd($student);
+        return view('attendance.delete')->withStudent($student);
+
+    }
+
+
     public function edit($id)
     {
         //
@@ -113,9 +154,14 @@ class AttendanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function demolish($student_id, $time_id)
     {
-        //
+       // dd($student_id);
+        $attendance = Attendance::where('time_id',$time_id)
+                                  ->where('student_id',$student_id)->delete();
+
+        Session::flash('success','Your comment has been successfully deleted');
+        return redirect()->route('attendance.display');
     }
 
     protected function findSlot()
