@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class StudentController extends Controller
 {
@@ -21,7 +22,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-       $students = Student::all();
+        $students = Student::all();
         return view('students.index')->withStudents($students);
     }
 
@@ -45,6 +46,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'ids.*'      =>  'required|size:6|alpha_num',
             'groups.*'   =>  'required',
@@ -52,7 +54,22 @@ class StudentController extends Controller
             'surnames.*' =>  'required|alpha|max:30'
         ]);
 
-        //
+
+
+
+        foreach (range(0,4) as $x){
+            $student = new Student();
+
+            $student->id = $request->ids[$x];
+            $student->group_id = $request->groups[$x];
+            $student->name = $request->names[$x];
+            $student->surname = $request->surnames[$x];
+
+            $student->save();
+        }
+
+        Session::flash('success','Students where successfully saved');
+        return redirect()->route('students.index');
     }
 
     /**
@@ -100,3 +117,4 @@ class StudentController extends Controller
         //
     }
 }
+

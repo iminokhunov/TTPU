@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Slot;
+use App\Teacher;
 use App\Timeslot;
 use App\User;
 use App\Attendance;
@@ -28,7 +29,7 @@ class AttendanceController extends Controller
     public function index()
     {
         date_default_timezone_set('Asia/Tashkent');
-        $teacher = User::find(1)->teacher->id;
+        $teacher = Teacher::find(1)->id;
         $slot = AttendanceController::findSlot();
         $date = date('Y-m-j',time());
         $students = DB::table('timeslots')
@@ -168,6 +169,7 @@ class AttendanceController extends Controller
     {
         date_default_timezone_set('Asia/Tashkent');
         $slots = Slot::all();
+        $time = date('H:i:s',time());
         foreach($slots as $slot)
         {
             $start = strtotime($slot->start_time);
