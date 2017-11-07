@@ -29,7 +29,7 @@ class AttendanceController extends Controller
     public function index()
     {
         date_default_timezone_set('Asia/Tashkent');
-        $teacher = Teacher::find(1)->id;
+        $teacher = Teacher::find(7)->id;
         $slot = AttendanceController::findSlot();
         $date = date('Y-m-j',time());
         $students = DB::table('timeslots')
@@ -71,7 +71,7 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         date_default_timezone_set('Asia/Tashkent');
-        $teacher = User::find(1)->teacher->id;
+        $teacher = Teacher::find(7)->id;
         $slot = AttendanceController::findSlot();
         $date = date('Y-m-j',time());
 
@@ -105,7 +105,7 @@ class AttendanceController extends Controller
     public function display()
     {
         date_default_timezone_set('Asia/Tashkent');
-        $teacher = User::find(1)->teacher->id;
+        $teacher = Teacher::find(7)->id;
         $slot = AttendanceController::findSlot();
         $date = date('Y-m-j',time());
         $students = DB::table('attendances')

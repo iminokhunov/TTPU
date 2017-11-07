@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    {{ Html::style('css/styles.css') }}
 </head>
 
 <body>
@@ -24,7 +25,7 @@
                             TimeTable
                         </a>
                         @else
-                            <a class="navbar-brand" href="{{ url('/') }}">
+                            <a class="navbar-brand" href="{{ url('timeslots') }}">
                                 TimeTable
                             </a>
 

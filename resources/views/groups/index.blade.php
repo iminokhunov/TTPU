@@ -11,7 +11,7 @@
 
         </div>
 
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-8 col-md-offset-2">
             <table class="table">
                 <thead>
                 <th>ID</th>
@@ -26,7 +26,7 @@
 
                     <tr>
 
-                        <th>{{ $group->id }}</th>
+                        <td>{{ $group->id }}</td>
                         <td>{{ $group->faculty->name }}</td>
                         <td>{{ $group->teacher->name . ' ' . $group->teacher->surname }}</td>
 

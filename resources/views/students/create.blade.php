@@ -18,7 +18,7 @@
 
                     {!! Form::open(['route' => 'students.store','data-parsley-validate'=>'', 'files'=> true]) !!}
 
-                        @foreach(range(0, 1) as $x)
+                        @foreach(range(0, 0) as $x)
 
                             <div class="panel-body">
 

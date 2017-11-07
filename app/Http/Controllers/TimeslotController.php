@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Group;
-use App\Student;
+use App\Timeslot;
+use App\Teacher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-
-class StudentController extends Controller
+use DB;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+class TimeslotController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +17,26 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
-        return view('students.index')->withStudents($students);
+        $timeslots = Timeslot::
+            where(DB::Raw('WEEKOFYEAR(date)'), '=', Carbon::now()->weekOfYear)
+            ->join('teachers','timeslots.teacher_id','=','teachers.id')
+            ->join('courses','timeslots.course_id','=','courses.id')
+            ->where('group_id','it')
+            ->orderBy('date')
+            ->select('timeslots.date','timeslots.course_id','timeslots.room_id',
+                'timeslots.teacher_id','timeslots.slot_id','timeslots.group_id',
+                'teachers.name as teacher_name','surname','courses.name as course_name')
+//            ->groupBy('date','slot_id')
+            ->get();
+//        dd($timeslots);
+
+//        foreach($timeslots as $timeslot)
+//        {
+//            echo $timeslot->time_id . "</br>";
+//        }
+        
+
+        return view('timeslots.index')->withTimeslots($timeslots);
     }
 
     /**
@@ -33,9 +46,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $groups = Group::all();
-
-        return view('students.create')->withGroups($groups);
+        //
     }
 
     /**
@@ -46,30 +57,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-
-        $this->validate($request, [
-            'ids.*'      =>  'required|size:6|alpha_num',
-            'groups.*'   =>  'required',
-            'names.*'    =>  'required|alpha|max:30',
-            'surnames.*' =>  'required|alpha|max:30'
-        ]);
-
-
-
-
-        foreach (range(0,0) as $x){
-            $student = new Student();
-
-            $student->id = $request->ids[$x];
-            $student->group_id = $request->group[$x];
-            $student->name = $request->names[$x];
-            $student->surname = $request->surnames[$x];
-
-            $student->save();
-        }
-
-        Session::flash('success','Students where successfully saved');
-        return redirect()->route('students.index');
+        //
     }
 
     /**
@@ -117,4 +105,3 @@ class StudentController extends Controller
         //
     }
 }
-

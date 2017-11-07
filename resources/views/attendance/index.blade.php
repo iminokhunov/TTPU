@@ -3,6 +3,21 @@
 @section('content')
 
     <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <h1>List of Students</h1>
+            </div>
+
+            <div class="col-md-2" style="margin-top: 22px;">
+                <a href="{{ route('attendance.display') }}" class="btn btn-primary btn-lg btn-block btn-h1-spacing">
+                    Added Students
+                </a>
+
+            </div>
+            <div class="col-md-12">
+                <hr>
+            </div>
+        </div>
         <div class="col-md-10 col-md-offset-1">
             {!! Form::open(array('route' => 'attendance.store','method' => 'POST')) !!}
             <div class="col-md-10 col-md-offset-1">
@@ -22,7 +37,7 @@
                         @foreach($students as $student)
 
                             <tr>
-                                <th>{{  $student->id }}</th>
+                                <td>{{  $student->id }}</td>
                                 <td>{{ $student->name }}</td>
                                 <td>{{ $student->surname  }}</td>
                                 <td>{{ $student->group_id }}</td>

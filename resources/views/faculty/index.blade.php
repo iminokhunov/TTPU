@@ -9,22 +9,22 @@
             </a>
 
         </div>
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-8 col-md-offset-2">
             <table class="table">
                 <thead>
                 <th>Faculty name</th>
 
-                <th></th>
+                <th>Options</th>
                 </thead>
 
                 <tbody>
                 @foreach($faculties as $faculty)
 
                     <tr>
-                        <th>{{  $faculty->name }}</th>
+                        <td>{{  $faculty->name }}</td>
 
-                        <td><a href="{{ route('faculty.edit',$faculty->id) }}" class="btn btn-default btn-sm">Edit</a>
-                            <a href="{{ route('faculty.destroy',$faculty->id) }}" class="btn btn-default btn-sm">Delete</a></td>
+                        <td><a href="{{ route('faculty.edit',$faculty->id) }}" class="btn btn-info btn-sm">Edit</a>
+                            <a href="{{ route('faculty.destroy',$faculty->id) }}" class="btn btn-danger btn-sm">Delete</a></td>
                     </tr>
 
                 @endforeach
